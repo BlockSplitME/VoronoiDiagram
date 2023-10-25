@@ -1,7 +1,10 @@
 package voronoi.model;
 
 import lombok.*;
+import voronoi.model.Fortune.Arc;
 import voronoi.model.Fortune.Fortune;
+import voronoi.model.Fortune.Point;
+import voronoi.model.Fortune.utils.GeometryFormulas;
 
 import java.util.*;
 
@@ -16,23 +19,63 @@ public class VoronoiDiagram {
     private static int startFieldX = 0;
     private static int startFieldY = 0;
 
-    private HashMap<Integer, double[]> points = new HashMap<>();
-    private ArrayList<double[]> lines;
-    public void getResult() {
-        this.createPointsCoordinates(this.getCountPoint(), this.getWidthField(), this.getHeightField());
-        this.lines = new Fortune(this.points, startFieldX, this.widthField, this.startFieldY, this.heightField).getResult();
+    private Set<Point> points = new HashSet<>();
+    private Set<Point> arcs = new HashSet<>();
+    private Set<ArrayList<Point>> lines = new HashSet<>();
+    private Set<ArrayList<Object>> circles = new HashSet<>();
+
+    private Fortune fortune;
+    public void init() {
+        this.createRandomPointsCoordinates(this.getCountPoint(), this.getWidthField(), this.getHeightField());
+        this.fortune = new Fortune(this.points, startFieldX, this.widthField, startFieldY, this.heightField);
     }
-    private void createPointsCoordinates(int count, int width, int height) {
+    public void doStep() {
+        this.arcs.clear();
+        this.lines.clear();
+        this.circles.clear();
+
+        if(this.fortune.getQueue().isEmpty()) {
+            this.fortune.lastStep();
+        } else {
+            this.fortune.doStep();
+
+            this.fortune.getArcs().forEach(arc -> {
+                this.arcs.addAll(Arc.getCoordinatesArc(arc, fortune.getBeachLineY(), heightField, startFieldX, widthField));
+            });
+
+            this.fortune.getCircles().forEach((center, r) -> {
+                this.circles.add(new ArrayList<>(){{add(center); add(r);}});
+//                this.circles.addAll(GeometryFormulas.getCircle(center, r));
+            });
+        }
+        this.fortune.getLines().forEach(line  -> {
+            //this.lines.addAll(GeometryFormulas.constructLine(line.getStartPoint(), GeometryFormulas.getBorderPoint(line.getStartPoint(), line.getEndPoint(), startFieldX, startFieldY, widthField, heightField)));
+            this.lines.add(new ArrayList<>(){{add(line.getStartPoint()); add(line.getEndPoint());}});
+        });
+
+    }
+    public void getResult() {
+        while(!this.fortune.getQueue().isEmpty()) {
+            this.fortune.doStep();
+        }
+        this.fortune.lastStep();
+
+        System.out.println("Completed task n = " + this.countPoint + " ( " + this.widthField + " x " + this.heightField + " )");
+        this.fortune.getLines().forEach(line  -> {
+            //this.lines.addAll(GeometryFormulas.constructLine(line.getStartPoint(), GeometryFormulas.getBorderPoint(line.getStartPoint(), line.getEndPoint(), startFieldX, startFieldY, widthField, heightField)));
+            this.lines.add(new ArrayList<>(){{add(line.getStartPoint()); add(line.getEndPoint());}});
+        });
+    }
+    private void createRandomPointsCoordinates(int count, int width, int height) {
         Random r = new Random();
-        double[][] y = new double[count][2];
+        long seed = r.nextInt();
+        r.setSeed(seed);
+        System.out.println(seed);
         for(int i = 0; i < count; i++) {
-            y[i][0] = r.nextDouble() * width;
-            y[i][1] = r.nextDouble() * height;
+            this.points.add(new Point(r.nextDouble() * width, r.nextDouble() * height));
         }
-        Comparator<double[]> comp = Comparator.comparingDouble(a -> a[1]);
-        Arrays.sort(y, comp); //.reversed()
-        for(int i = 0; i < count; i++) {
-            this.points.put(i, new double[]{y[i][0], y[i][1]});
-        }
+    }
+    public double getBeachLineY() {
+        return this.getFortune().getBeachLineY();
     }
  }

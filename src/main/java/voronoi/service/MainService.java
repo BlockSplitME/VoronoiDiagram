@@ -1,14 +1,37 @@
 package voronoi.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import voronoi.model.VoronoiDiagram;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class MainService {
-//    private final VoronoiDiagram diagram;
-    public VoronoiDiagram getDiagram(int count, int width, int height) {
-        VoronoiDiagram obj = new VoronoiDiagram(count, width, height);
-        obj.getResult();
-        return obj;
+    public VoronoiDiagram voronoiDiagram;
+    public Map<String, Object> init(int count, int width, int height) {
+        this.voronoiDiagram = new VoronoiDiagram(count, width, height);
+        this.voronoiDiagram.init();
+        return new HashMap<>(){{
+           put("points", voronoiDiagram.getPoints());
+        }};
+    }
+    public Map<String, Object> doStep() {
+        this.voronoiDiagram.doStep();
+        return new HashMap<>(){{
+            put("points", voronoiDiagram.getPoints());
+            put("lines", voronoiDiagram.getLines());
+            put("arcs", voronoiDiagram.getArcs());
+            put("circles", voronoiDiagram.getCircles());
+            put("beachLine", voronoiDiagram.getBeachLineY());
+        }};
+    }
+    public Map<String, Object> getResult() {
+        this.voronoiDiagram.getResult();
+        return new HashMap<>(){{
+            put("points", voronoiDiagram.getPoints());
+            put("lines", voronoiDiagram.getLines());
+        }};
     }
 }

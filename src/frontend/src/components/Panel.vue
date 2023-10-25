@@ -24,6 +24,8 @@
                     ></v-text-field>
 
                     <v-btn @click="createField" block class="mt-2" variant="outlined">Запуск</v-btn>
+                    <v-btn @click="doStep" block class="mt-2" variant="outlined">Сделать шаг</v-btn>
+                    <v-btn @click="getResult" block class="mt-2" variant="outlined">Результат</v-btn>
                 </v-form>
             </v-sheet>
           </v-card>
@@ -32,12 +34,12 @@
 
 <script>
   export default {
-    emits: ['updateParent'],
+    emits: ['createField', 'doStep', 'getResult'],
     data: () => ({
         parameters: {
-          param_W: 500,
-          param_H: 500,
-          param_n: 20,
+          param_n: 100,
+          param_W: 1200,
+          param_H: 800
         },  
         paramRules: [
             value => {
@@ -56,11 +58,16 @@
           if(!(/^\d+$/.test(param)) || param < 1) {
             return false
           }
-          console.log(param);
           params.push(+param)
         }
-        this.$emit('updateParent', params)
+        this.$emit('createField', params)
       },
+      doStep() {
+        this.$emit('doStep')
+      },
+      getResult() {
+        this.$emit('getResult')
+      }
     },
   }
 </script>

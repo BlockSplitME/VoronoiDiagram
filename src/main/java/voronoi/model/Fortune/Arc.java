@@ -1,15 +1,20 @@
 package voronoi.model.Fortune;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Objects;
+import lombok.*;
+import voronoi.model.Fortune.utils.GeometryFormulas;
 
-import static voronoi.config.Config.functionParabol;
+import java.util.*;
 
-public record Arc(double[] focus, double[] focusNext, ArrayList<double[]> coordinates) implements Comparator, Comparable {
-    public Arc(double[] focusFirst, ArrayList<double[]> coordinates) {
-        this(focusFirst, null, coordinates);
+@Getter
+@Setter
+@AllArgsConstructor
+public class Arc implements Comparator, Comparable {
+    private Point focus;
+    private double leftBP, rightBP;
+    private final int id;
+
+    public Arc(Point focus, int id) {
+        this(focus, focus.x(), focus.x(), id);
     }
     @Override
     public int compareTo(Object o) {
@@ -20,30 +25,56 @@ public record Arc(double[] focus, double[] focusNext, ArrayList<double[]> coordi
     public int compare(Object o1, Object o2) {
         Arc m1 = (Arc) o1;
         Arc m2 = (Arc) o2;
-        return (m1.coordinates.get(0)[0] >= m2.coordinates.get(0)[0]) ? 1: -1;
+        if(m1.equals(m2)) {
+            return 0;
+        }
+        if(m1.leftBP > m2.leftBP) {
+            return 1;
+        } else if (m1.leftBP == m2.leftBP) {
+            if(m1.rightBP > m2.rightBP) {
+                return 1;
+            } else if(m1.rightBP == m2.rightBP) {
+                if(m2.getFocus() != null) {
+                    if(m1.getFocus().x() > m2.getFocus().x()) {
+                        return 1;
+                    }
+                }
+            }
+        }
+        return -1;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Arc arc = (Arc) o;
-        return Objects.equals(coordinates.get(0)[0], arc.coordinates.get(0)[0]);
+        if(o == null) return false;
+        if(o.getClass().equals(this.getClass())) {
+            Arc arc = (Arc) o;
+            return arc.id == this.id;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(coordinates);
-        result = 31 * result + Arrays.hashCode(focus);
-        result = 31 * result + Arrays.hashCode(focusNext);
-        return result;
+        return Objects.hash(id);
+    }
+    public static Set<Point> getCoordinatesArc (Arc arc, double scanLine, double borderMaxY, double leftBP, double rightBP) {
+        if(arc.leftBP > leftBP) leftBP = arc.leftBP;
+        if(arc.rightBP < rightBP) rightBP = arc.rightBP;
+        return GeometryFormulas.constructParabola(leftBP, rightBP, arc.focus, scanLine, borderMaxY);
     }
 
-    public static ArrayList<double[]> constructParabola(double startX, double endX, double[] coordinates, double yScanLine) {
-        ArrayList<double[]> parabola = new ArrayList<>();
-        for(double x = startX; x < endX; x++) {
-            parabola.add(new double[]{x, functionParabol(x, coordinates[0], coordinates[1], yScanLine)});
+    public static Arc searchArc(TreeSet<Arc> arcs, double x) {
+        SortedSet<Arc> sorted = arcs.headSet(new Arc(null, x, 0, -1));
+        if(sorted.isEmpty()) {
+            return null;
+        } else if (sorted.last().getRightBP() < x ) {
+            return null;
         }
-        return parabola;
+        return sorted.last();
+    }
+    public String toString() {
+        return "Arc(focus=" + focus +  " id=" + id;
     }
 }
