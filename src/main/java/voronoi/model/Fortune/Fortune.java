@@ -35,9 +35,7 @@ public class Fortune {
         this.generateQueue();
     }
     private void generateQueue() {
-        this.points.forEach((point) -> {
-            this.queue.add(new Event("point", point, null, null));
-        });
+        this.points.forEach((point) -> this.queue.add(new Event("point", point, null, null)));
         //service event
         //left
         this.queue.add(new Event("point", new Point(this.startFieldX - this.widthField, this.startFieldY + (this.heightField + this.startFieldY) / 2), null, null));
@@ -45,14 +43,11 @@ public class Fortune {
         this.queue.add(new Event("point", new Point(this.widthField + this.widthField, this.startFieldY + 1 + (this.heightField + this.startFieldY) / 2), null, null));
 //        center under
         this.queue.add(new Event("point", new Point(this.startFieldX + (this.widthField + this.startFieldX) / 2, this.startFieldY - this.heightField), null, null));
-//        //left under
-//        this.queue.add(new Event("point", new Point(this.startFieldX - this.widthField, this.startFieldY - (this.heightField + this.startFieldY) / 2), null, null));
-//        //right under
-//        this.queue.add(new Event("point", new Point(this.widthField + this.widthField, this.startFieldY - (this.heightField + this.startFieldY) / 2), null, null));
     }
     public void doStep() {
         this.step++;
         Event currentEvent = this.queue.poll();
+        if(currentEvent == null) return;
         this.beachLineY = currentEvent.getPoint().y();
         if (currentEvent.getType().equals("point")) {
             this.pointEvent(currentEvent.getPoint());
@@ -108,7 +103,7 @@ public class Fortune {
     private void crossArcs(Arc arc1, Arc arc2) {
         TreeSet<Point> crossPoints = GeometryFormulas.parabolasCrossX(arc1.getFocus().x(), arc2.getFocus().x(), arc1.getFocus().y(), arc2.getFocus().y(), this.beachLineY);
         if (crossPoints != null) {
-            double x = 0;
+            double x;
             if(crossPoints.size() == 2) {
                 if(arc1.getLeftBP() == crossPoints.first().x()) {
                     x = crossPoints.last().x();

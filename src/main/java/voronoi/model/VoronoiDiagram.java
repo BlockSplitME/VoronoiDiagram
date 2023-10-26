@@ -36,26 +36,18 @@ public class VoronoiDiagram {
         if(!this.fortune.getQueue().isEmpty()) {
             this.fortune.doStep();
 
-            this.fortune.getArcs().forEach(arc -> {
-                this.arcs.addAll(Arc.getCoordinatesArc(arc, fortune.getBeachLineY(), heightField, startFieldX, widthField));
-            });
+            this.fortune.getArcs().forEach(arc -> this.arcs.addAll(Arc.getCoordinatesArc(arc, fortune.getBeachLineY(), heightField, startFieldX, widthField)));
 
-            this.fortune.getCircles().forEach((center, r) -> {
-                this.circles.add(new ArrayList<>(){{add(center); add(r);}});
-            });
+            this.fortune.getCircles().forEach((center, r) -> this.circles.add(new ArrayList<>(){{add(center); add(r);}}));
         }
-        this.fortune.getLines().forEach(line  -> {
-            this.lines.add(new ArrayList<>(){{add(line.getStartPoint()); add(line.getEndPoint());}});
-        });
+        this.fortune.getLines().forEach(line  -> this.lines.add(new ArrayList<>(){{add(line.getStartPoint()); add(line.getEndPoint());}}));
 
     }
     public void getResult() {
         while(!this.fortune.getQueue().isEmpty()) {
             this.fortune.doStep();
         }
-        this.fortune.getLines().forEach(line  -> {
-            this.lines.add(new ArrayList<>(){{add(line.getStartPoint()); add(line.getEndPoint());}});
-        });
+        this.fortune.getLines().forEach(line  -> this.lines.add(new ArrayList<>(){{add(line.getStartPoint()); add(line.getEndPoint());}}));
     }
     private void createRandomPointsCoordinates(int count, int width, int height) {
         Random r = new Random();
