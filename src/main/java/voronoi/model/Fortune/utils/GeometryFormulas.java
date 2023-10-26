@@ -1,6 +1,5 @@
 package voronoi.model.Fortune.utils;
 
-import voronoi.model.Fortune.Arc;
 import voronoi.model.Fortune.Point;
 
 import java.util.ArrayList;
@@ -182,49 +181,6 @@ public class GeometryFormulas {
             double Ua = numerator_a / denominator;
             double Ub = numerator_b / denominator;
             return Ua >= 0 && Ua <= 1 && Ub >= 0 && Ub <= 1;
-        }
-    }
-    public static Point pointCrossBorder(ArrayList<ArrayList<Point>> borders, Point startPoint, Point endPoint) {
-        if(GeometryFormulas.isPointInside(borders, startPoint)) {
-            if(GeometryFormulas.isPointInside(borders, endPoint)) {
-                for(ArrayList<Point> segment: borders) {
-                    Point newEndPoint;
-                    if(startPoint.x() < endPoint.x()) {
-                        newEndPoint = GeometryFormulas.getNewLinePoint(startPoint, endPoint, endPoint.x() + Math.max(Math.max(segment.get(0).x(), segment.get(1).x()), Math.max(segment.get(0).y(), segment.get(1).y())));
-                    } else {
-                        newEndPoint = GeometryFormulas.getNewLinePoint(startPoint, endPoint, endPoint.x() - Math.max(Math.max(segment.get(0).x(), segment.get(1).x()), Math.max(segment.get(0).y(), segment.get(1).y())));
-                    }
-                    return GeometryFormulas.pointCrossBorder(borders, startPoint, newEndPoint);
-                }
-            } else {
-                for(ArrayList<Point> segment: borders) {
-                    Point crossPoint = GeometryFormulas.pointSegmentCross(segment.get(0), segment.get(1), startPoint, endPoint);
-                    if(crossPoint != null) {
-                        return crossPoint;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public static Point pointSegmentCross(Point startP1, Point endP1, Point startP2, Point endP2) {
-        double y1 = startP1.y(); double x1 = startP1.x();
-        double y2 = endP1.y();   double x2 = endP1.x();
-        double y3 = startP2.y(); double x3 = startP2.x();
-        double y4 = endP2.y();   double x4 = endP2.x();
-
-        double denominator = (y4-y3)*(x1-x2)-(x4-x3)*(y1-y2);
-
-        if (denominator == 0) {
-            return null;
-        } else {
-            double numerator_a = (x4 - x2) * (y4 - y3) - (x4 - x3) * (y4 - y2);
-            double numerator_b = (x1 - x2) * (y4 - y2) - (x4 - x2) * (y1 - y2);
-            double Ua = numerator_a / denominator;
-            double Ub = numerator_b / denominator;
-            if(Ua >= 0 && Ua <= 1 && Ub >= 0 && Ub <= 1) return new Point(x1 * Ua + x2 * (1 - Ua), y1 * Ua + y2 * (1-Ua));
-            else return null;
         }
     }
 }

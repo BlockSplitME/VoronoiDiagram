@@ -3,7 +3,6 @@ package voronoi.service;
 import org.springframework.stereotype.Service;
 import voronoi.model.VoronoiDiagram;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +10,7 @@ import java.util.Map;
 public class MainService {
     public VoronoiDiagram voronoiDiagram;
     public Map<String, Object> init(int count, int width, int height) {
+        System.out.println("\nTask parameters: n = " + count + " ( " + width + " x " + height + " )");
         this.voronoiDiagram = new VoronoiDiagram(count, width, height);
         this.voronoiDiagram.init();
         return new HashMap<>(){{
@@ -28,7 +28,9 @@ public class MainService {
         }};
     }
     public Map<String, Object> getResult() {
+        long m = System.currentTimeMillis();
         this.voronoiDiagram.getResult();
+        System.out.println("Lead time: "+ (double) (System.currentTimeMillis() - m) + "ms");
         return new HashMap<>(){{
             put("points", voronoiDiagram.getPoints());
             put("lines", voronoiDiagram.getLines());

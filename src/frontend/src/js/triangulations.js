@@ -122,7 +122,6 @@ class Triangulations {
         .attr("r", 1);
     }
     renderCircle(point, r) {
-        console.log(point, " ", r);
         this.circleGroup.append("circle")
         .attr("cx", point["x"])
         .attr("cy", point["y"])
@@ -157,51 +156,7 @@ class Triangulations {
         this.updateGraph()
     }
 
-    voronoiLib() {
-        let voronoi = d3.Delaunay.from(
-            this.nodes,
-            (d) => d.x,
-            (d) => d.y
-        // ).voronoi([0, 0, this.svg._groups[0][0].clientWidth, this.svg._groups[0][0].clientHeight])
-        ).voronoi([this.startX-5, this.startY-5, this.startX + this.width + 5, this.startY + this.height + 5])
-        this.svg.append("path")
-        .attr("d",voronoi.render())
-        .attr("fill", "transparent")
-        .attr("stroke","black")
-        
-        this.svg.append("rect")
-        .attr("x", this.startX - 5)
-        .attr("y", this.startY - 5)
-        .attr("width", this.width + 10)
-        .attr("height",this.height + 10)
-        .attr("fill","transparent")
-        .attr("stroke", "black")
-
-    }
-    scaleEvent() {
-        document.querySelector('svg').addEventListener('wheel', zoomHandler);
-    }
 }
-function zoomHandler(event) {
-    event.preventDefault();
-    const svg = document.querySelector('svg')
-    const scaleFactor = 0.1;
-    let viewBox = svg.viewBox.animVal;
-    let newWidth = viewBox.width;
-    let newHeight = viewBox.height;
-  
-    if (event.deltaY > 0) {
-      // Zoom out
-      newWidth = viewBox.width * (1 + scaleFactor);
-      newHeight = viewBox.height * (1 + scaleFactor);
-    } else {
-      // Zoom in
-      newWidth = viewBox.width * (1 - scaleFactor);
-      newHeight = viewBox.height * (1 - scaleFactor);
-    }
-  
-    svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${newWidth} ${newHeight}`);
-  }
 export default {
     Triangulations
 }

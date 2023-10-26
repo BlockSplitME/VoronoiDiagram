@@ -7,7 +7,6 @@ import voronoi.model.Fortune.utils.Factory;
 import voronoi.model.Fortune.utils.GeometryFormulas;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 @Getter
 @Setter
@@ -39,6 +38,17 @@ public class Fortune {
         this.points.forEach((point) -> {
             this.queue.add(new Event("point", point, null, null));
         });
+        //service event
+        //left
+        this.queue.add(new Event("point", new Point(this.startFieldX - this.widthField, this.startFieldY + (this.heightField + this.startFieldY) / 2), null, null));
+        //right
+        this.queue.add(new Event("point", new Point(this.widthField + this.widthField, this.startFieldY + 1 + (this.heightField + this.startFieldY) / 2), null, null));
+//        center under
+        this.queue.add(new Event("point", new Point(this.startFieldX + (this.widthField + this.startFieldX) / 2, this.startFieldY - this.heightField), null, null));
+//        //left under
+//        this.queue.add(new Event("point", new Point(this.startFieldX - this.widthField, this.startFieldY - (this.heightField + this.startFieldY) / 2), null, null));
+//        //right under
+//        this.queue.add(new Event("point", new Point(this.widthField + this.widthField, this.startFieldY - (this.heightField + this.startFieldY) / 2), null, null));
     }
     public void doStep() {
         this.step++;
@@ -49,42 +59,6 @@ public class Fortune {
         } else {
             this.circleEvent(currentEvent.getPeak(), currentEvent.getArc());
         }
-    }
-    public void lastStep() {
-        System.out.println("Last step: ");
-        this.halfRibs.forEach((key, value) -> {
-            for (Rib rib : value) {
-                if(GeometryFormulas.isPointInside(this.getBorderLines(), rib.getStartPoint())) {
-                    Point point = rib.getIntermediatePoint();
-                    System.out.println(GeometryFormulas.middlePoint(key.get(0), key.get(1)));
-                    this.setEndPointForRib(Objects.requireNonNullElseGet(point, () -> GeometryFormulas.middlePoint(key.get(0), key.get(1))), rib);
-                    this.lines.add(rib);
-                }
-            }
-        });
-    }
-    private ArrayList<ArrayList<Point>> getBorderLines() {
-        return new ArrayList<>(){{
-           add(new ArrayList<>(){{
-               add(new Point(startFieldX, startFieldY));
-               add(new Point(startFieldX, heightField));
-           }});
-           add(new ArrayList<>(){{
-               add(new Point(startFieldX, heightField));
-               add(new Point(widthField, heightField));
-           }});
-           add(new ArrayList<>(){{
-               add(new Point(widthField, heightField));
-               add(new Point(widthField, startFieldY));
-           }});
-           add(new ArrayList<>(){{
-               add(new Point(widthField, startFieldY));
-               add(new Point(startFieldX, startFieldY));
-           }});
-        }};
-    }
-    private void setEndPointForRib(Point point, Rib rib) {
-        rib.setEndPoint(GeometryFormulas.pointCrossBorder(this.getBorderLines(), rib.getStartPoint(), point));
     }
     private void pointEvent(Point pointCrd) {
         if(!this.arcs.isEmpty()) {

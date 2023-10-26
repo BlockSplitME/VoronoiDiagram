@@ -13,19 +13,30 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
+Backend
+```sh
+mvn install
+``` 
+
+Frontend
 ```sh
 cd src/frontend/
 npm install
 ```
 
 ### Compile and Hot-Reload for Development
+Backend
+```sh
+mvn spring-boot:run
+``` 
 
+Frontend
 ```sh
 npm run dev
 ```
 
 ### Compile and Minify for Production
-
+Frontend
 ```sh
 npm run build
 ```

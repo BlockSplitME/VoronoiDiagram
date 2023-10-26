@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>voronoi</groupId>
-    <artifactId>lab1</artifactId>
+    <artifactId>voronoiDiagram</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <parent>
@@ -67,7 +67,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>lab1</finalName>
+        <finalName>voronoiDiagram</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

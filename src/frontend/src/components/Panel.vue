@@ -38,7 +38,7 @@
     data: () => ({
         parameters: {
           param_n: 100,
-          param_W: 1200,
+          param_W: 1000,
           param_H: 800
         },  
         paramRules: [

@@ -4,7 +4,6 @@ import lombok.*;
 import voronoi.model.Fortune.Arc;
 import voronoi.model.Fortune.Fortune;
 import voronoi.model.Fortune.Point;
-import voronoi.model.Fortune.utils.GeometryFormulas;
 
 import java.util.*;
 
@@ -34,9 +33,7 @@ public class VoronoiDiagram {
         this.lines.clear();
         this.circles.clear();
 
-        if(this.fortune.getQueue().isEmpty()) {
-            this.fortune.lastStep();
-        } else {
+        if(!this.fortune.getQueue().isEmpty()) {
             this.fortune.doStep();
 
             this.fortune.getArcs().forEach(arc -> {
@@ -45,11 +42,9 @@ public class VoronoiDiagram {
 
             this.fortune.getCircles().forEach((center, r) -> {
                 this.circles.add(new ArrayList<>(){{add(center); add(r);}});
-//                this.circles.addAll(GeometryFormulas.getCircle(center, r));
             });
         }
         this.fortune.getLines().forEach(line  -> {
-            //this.lines.addAll(GeometryFormulas.constructLine(line.getStartPoint(), GeometryFormulas.getBorderPoint(line.getStartPoint(), line.getEndPoint(), startFieldX, startFieldY, widthField, heightField)));
             this.lines.add(new ArrayList<>(){{add(line.getStartPoint()); add(line.getEndPoint());}});
         });
 
@@ -58,11 +53,7 @@ public class VoronoiDiagram {
         while(!this.fortune.getQueue().isEmpty()) {
             this.fortune.doStep();
         }
-        this.fortune.lastStep();
-
-        System.out.println("Completed task n = " + this.countPoint + " ( " + this.widthField + " x " + this.heightField + " )");
         this.fortune.getLines().forEach(line  -> {
-            //this.lines.addAll(GeometryFormulas.constructLine(line.getStartPoint(), GeometryFormulas.getBorderPoint(line.getStartPoint(), line.getEndPoint(), startFieldX, startFieldY, widthField, heightField)));
             this.lines.add(new ArrayList<>(){{add(line.getStartPoint()); add(line.getEndPoint());}});
         });
     }
@@ -70,7 +61,7 @@ public class VoronoiDiagram {
         Random r = new Random();
         long seed = r.nextInt();
         r.setSeed(seed);
-        System.out.println(seed);
+        System.out.println("Seed: " + seed);
         for(int i = 0; i < count; i++) {
             this.points.add(new Point(r.nextDouble() * width, r.nextDouble() * height));
         }
