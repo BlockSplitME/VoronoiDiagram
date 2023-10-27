@@ -134,7 +134,7 @@ public class Fortune {
                 Point center = GeometryFormulas.centerCircle(tmp1.getFocus(),tmp2.getFocus(),tmp3.getFocus());
                 double r = GeometryFormulas.getDistance(center, tmp1.getFocus());
                 double eventY = center.y() - r;
-                if(eventY < this.beachLineY && this.checkValidCircleEvent(tmp1.getFocus(), tmp2.getFocus(), tmp3.getFocus(), center)) {
+                if(eventY < this.beachLineY && GeometryFormulas.checkValidCircleEvent(tmp1.getFocus(), tmp2.getFocus(), tmp3.getFocus(), center)) {
                     this.queue.add(new Event("circle", new Point(center.x(), eventY), center, tmp2));
                 }
                 this.circles.put(center, r);
@@ -190,21 +190,4 @@ public class Fortune {
             }
         }
     }
-    public boolean checkValidCircleEvent(Point lf, Point mf, Point rf, Point center) {
-        boolean leftBreakpointMovingRight = isMovingRight(lf, mf);
-        boolean rightBreakpointMovingRight = isMovingRight(mf, rf);
-        double leftInitialX = getInitialX(lf, mf, leftBreakpointMovingRight);
-        double rightInitialX = getInitialX(mf, rf, rightBreakpointMovingRight);
-        return ((leftBreakpointMovingRight && leftInitialX < center.x()) ||
-               (!leftBreakpointMovingRight && leftInitialX > center.x())) &&
-               ((rightBreakpointMovingRight && rightInitialX < center.x()) ||
-               (!rightBreakpointMovingRight && rightInitialX > center.x()));
-    }
-    private boolean isMovingRight(Point lp, Point rp) {
-        return lp.y() < rp.y();
-    }
-    private double getInitialX(Point lp, Point rp, boolean movingRight ) {
-        return movingRight ? lp.x() : rp.x();
-    }
-
 }

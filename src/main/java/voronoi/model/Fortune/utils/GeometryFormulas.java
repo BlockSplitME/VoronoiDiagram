@@ -183,4 +183,21 @@ public class GeometryFormulas {
             return Ua >= 0 && Ua <= 1 && Ub >= 0 && Ub <= 1;
         }
     }
+    public static boolean checkValidCircleEvent(Point lf, Point mf, Point rf, Point center) {
+        boolean leftBreakpointMovingRight = isMovingRight(lf, mf);
+        boolean rightBreakpointMovingRight = isMovingRight(mf, rf);
+        double leftInitialX = getInitialX(lf, mf, leftBreakpointMovingRight);
+        double rightInitialX = getInitialX(mf, rf, rightBreakpointMovingRight);
+        return ((leftBreakpointMovingRight && leftInitialX < center.x()) ||
+                (!leftBreakpointMovingRight && leftInitialX > center.x())) &&
+                ((rightBreakpointMovingRight && rightInitialX < center.x()) ||
+                        (!rightBreakpointMovingRight && rightInitialX > center.x()));
+    }
+    private static boolean isMovingRight(Point lp, Point rp) {
+        return lp.y() < rp.y();
+    }
+    private static double getInitialX(Point lp, Point rp, boolean movingRight ) {
+        return movingRight ? lp.x() : rp.x();
+    }
+
 }

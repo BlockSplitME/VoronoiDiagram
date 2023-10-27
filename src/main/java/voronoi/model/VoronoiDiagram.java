@@ -52,7 +52,7 @@ public class VoronoiDiagram {
     private void createRandomPointsCoordinates(int count, int width, int height) {
         Random r = new Random();
         long seed = r.nextInt();
-        r.setSeed(seed);
+//        r.setSeed(122403814);
         System.out.println("Seed: " + seed);
         for(int i = 0; i < count; i++) {
             this.points.add(new Point(r.nextDouble() * width, r.nextDouble() * height));
