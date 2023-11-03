@@ -1,7 +1,7 @@
 # VoronoiDiagram
 Example1. n = 100 (1000 x 800)
 
-![](.,\images\example1.png)
+![](images\example1.png)
 
 Example2. n = 1000 (1000 x 800)
 
