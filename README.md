@@ -1,15 +1,17 @@
 # VoronoiDiagram
+Example1. n = 100 (1000 x 800)
 
-This template should help get you started developing with Vue 3 in Vite.
+![](\images\example1.png)
+
+Example2. n = 1000 (1000 x 800)
+
+![](\images\example2.png)
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-[IDEA Intellij](https://www.jetbrains.com/ru-ru/idea/)
+Front: [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Back: [IDEA Intellij](https://www.jetbrains.com/ru-ru/idea/)
 
 ## Project Setup
 
@@ -35,8 +37,4 @@ Frontend
 npm run dev
 ```
 
-### Compile and Minify for Production
-Frontend
-```sh
-npm run build
-```
+
