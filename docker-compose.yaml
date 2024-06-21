@@ -2,12 +2,16 @@ services:
   back:
     image: openjdk:22-jdk
     container_name: voronoi-back
+    env_file:
+      - .env
     build: src/backend
     ports:
-      - "8080:8080"
+      - $BACK_PORT:$BACK_PORT
   front:
     image: node:lts-alpine
     container_name: voronoi-front
+    env_file:
+      - .env
     build: src/frontend
     ports:
-      - "3000:3000"
+      - $FRONT_PORT:$FRONT_PORT

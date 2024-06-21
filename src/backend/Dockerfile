@@ -1,10 +1,12 @@
 FROM openjdk:22-jdk
 
+ARG BACK_PORT
+
 WORKDIR /server
 
 COPY target/voronoiDiagram.jar ./
 
-CMD ["java","-jar","voronoiDiagram.jar"]
+CMD ["java","-jar","voronoiDiagram.jar", "--server.port=8083"]
 
 #FROM openjdk:22-jdk
 #FROM jelastic/maven:3.8.6-openjdk-20.ea-b24

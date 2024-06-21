@@ -1,4 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
+import envCompatible from 'vite-plugin-env-compatible';
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -6,6 +7,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [
     vue(),
+    envCompatible(),
   ],
   resolve: {
     alias: {
@@ -14,10 +16,10 @@ export default defineConfig({
   },
   
   server: {
-    port: 3000,
+    port: Number(process.env.FRONT_PORT ?? 3000),
     proxy: {
         '/api': {
-            target: 'http://localhost:8080',
+            target: `http://localhost:${Number(process.env.BACK_PORT ?? 8083)}`,
             // rewrite: (path) => path.replace(/^\/api/, ''),
             changeOrigin: true
         }

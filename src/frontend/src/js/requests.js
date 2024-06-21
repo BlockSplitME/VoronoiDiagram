@@ -13,7 +13,7 @@ async function getResult() {
     return baseRequest("result?")
 }
 async function baseRequest(params) {
-    return fetch("http://localhost:8080/api/" + params, {
+    return fetch(`http://localhost:${Number(process.env.BACK_PORT ?? 8083)}/api/` + params, {
        method: 'GET',
     }).then(function(response){
         console.log("Data received");

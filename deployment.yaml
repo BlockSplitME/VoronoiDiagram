@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voronoi-diagram
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: voronoi-diagram
+  template:
+    metadata:
+      labels:
+        app: voronoi-diagram
+    spec:
+      containers:
+        - name: voronoi-diagram-k8s
+          image: blocksplitme/voronoi-front:latest
+          ports:
+          - containerPort: 80
+
